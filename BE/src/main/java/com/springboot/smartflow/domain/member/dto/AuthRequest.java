@@ -30,4 +30,10 @@ public class AuthRequest {
         @Schema(example = "password123!")
         private String password;
     }
+
+    @Getter @Setter
+    public static class RefreshTokenRequest {
+        @Schema(description = "재발급을 위한 리프레시 토큰", example = "eyJhbGciOiJIUzI1NiJ9...")
+        private String refreshToken;
+    }
 }
