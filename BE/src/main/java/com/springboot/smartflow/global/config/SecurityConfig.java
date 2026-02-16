@@ -1,11 +1,12 @@
 package com.springboot.smartflow.global.config;
 
-import com.springboot.smartflow.global.auth.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,8 +18,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    // private final OAuth2SuccessHandler oAuth2SuccessHandler; // 잠시 주석
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -27,14 +26,25 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll() // 인증 API 허용
+                        // 1. 공통 접근 허용 경로
+                        .requestMatchers(
+                                "/", "/login", "/signup", "/main",
+                                "/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/error"
+                        ).permitAll()
+                        // 2. 중요: JSP가 위치한 내부 디렉토리 접근 허용 (403 해결 핵심)
+                        .requestMatchers("/WEB-INF/views/**").permitAll()
+                        // 3. 나머지 요청은 인증 필요
                         .anyRequest().authenticated()
                 );
-        // .oauth2Login(oauth -> oauth  // OAuth2 설정 잠시 주석
-        //    .successHandler(oAuth2SuccessHandler)
-        // );
 
         return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                PathRequest.toStaticResources().atCommonLocations()
+        );
     }
 
     @Bean

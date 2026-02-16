@@ -40,7 +40,7 @@ mybatis:
 jwt:
   secret: your_very_long_random_string_for_safety_at_least_32_chars_smartflow_secret_key
 
-# 로그 레벨 설정 (디버깅용)
 logging:
   level:
-    com.springboot.smartflow.domain.member.mapper: debug # 실행되는 SQL 로그 확인 가능
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
