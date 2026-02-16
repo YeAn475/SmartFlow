@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: SmartFlow
+
+  # 1. 데이터베이스 설정 (PostgreSQL)
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/smartflow
+    username: iseonghun  # 본인의 DB 계정명
+    password: ""         # 비밀번호가 있다면 입력, 없으면 빈 값 유지
+
+  # 2. Redis 설정 (JWT 리프레시 토큰 관리용)
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  # 3. JSP View Resolver 설정 (프론트엔드 연동용)
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+  # 4. Security & OAuth2 (현재 비활성화 상태 유지)
+  # 소셜 로그인을 사용하기 전까지는 아래 설정이 없어도 되도록 SecurityConfig에서 조절했습니다.
+
+# 5. MyBatis 설정
+mybatis:
+  # XML 매퍼 위치
+  mapper-locations: classpath:mapper/**/*.xml
+  # 엔티티 클래스 패키지 경로
+  type-aliases-package: com.springboot.smartflow.entity
+  configuration:
+    # DB의 snake_case를 Java의 camelCase로 자동 매핑
+    map-underscore-to-camel-case: true
+    # Enum 타입을 문자열로 처리하도록 설정 (role 처리용)
+    default-enum-type-handler: org.apache.ibatis.type.EnumTypeHandler
+
+# 6. JWT 설정 (보안을 위해 32자 이상의 긴 문자열 권장)
+jwt:
+  secret: your_very_long_random_string_for_safety_at_least_32_chars_smartflow_secret_key
+
+# 로그 레벨 설정 (디버깅용)
+logging:
+  level:
+    com.springboot.smartflow.domain.member.mapper: debug # 실행되는 SQL 로그 확인 가능

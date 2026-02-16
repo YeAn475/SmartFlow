@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -25,20 +25,36 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-security-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:4.0.1'
-    compileOnly 'org.projectlombok:lombok'
+    // Web & JSP
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
+
+    // Database & MyBatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
     runtimeOnly 'org.postgresql:postgresql'
+
+    // Security & Auth
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Documentation (Swagger)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4'
+
+    // Utils
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-data-redis-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-security-oauth2-client-test'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:4.0.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

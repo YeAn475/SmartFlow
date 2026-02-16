@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.smartflow.domain.leave.mapper.LeaveMapper">
+
+    <insert id="insertLeaveRequest" useGeneratedKeys="true" keyProperty="requestId">
+        INSERT INTO leave_request (requester_id, approver_id, leave_type, leave_date, reason, status)
+        VALUES (#{requesterId}, #{approverId}, #{leaveType}, #{leaveDate}, #{reason}, 'PENDING')
+    </insert>
+
+    <select id="findByRequesterId" resultType="com.springboot.smartflow.entity.LeaveRequest">
+        SELECT * FROM leave_request
+        WHERE requester_id = #{requesterId}
+        ORDER BY leave_date DESC
+    </select>
+
+</mapper>
