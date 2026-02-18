@@ -1,18 +1,12 @@
 package com.springboot.smartflow.entity;
 
 import com.springboot.smartflow.enums.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import com.springboot.smartflow.enums.UserStatus;
+import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
 public class User {
     private Long userId;
@@ -24,7 +18,9 @@ public class User {
     private Float totalLeave;
     private Float remainLeave;
     private String provider;
-    private String provider_id;
+    private String providerId;
+    private Boolean isDeleted;
+    private UserStatus userStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -5,7 +5,8 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class Department {
-    private Long departmentId;
-    private String name;
+public class MessageReadReceipt {
+    private Long messageId;
+    private Long userId;
+    private Boolean isRead;
 }

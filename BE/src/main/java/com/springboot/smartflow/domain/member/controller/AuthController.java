@@ -33,7 +33,7 @@ public class AuthController {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
     }
-
+ 
     @PostMapping("/refresh")
     @Operation(summary = "토큰 재발급", description = "리프레시 토큰을 이용하여 새로운 액세스 토큰을 발급합니다.")
     public ResponseEntity<AuthResponse> refresh(@ParameterObject AuthRequest.RefreshTokenRequest request) {

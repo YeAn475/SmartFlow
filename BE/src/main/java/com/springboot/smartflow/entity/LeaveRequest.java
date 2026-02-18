@@ -1,30 +1,21 @@
 package com.springboot.smartflow.entity;
 
-import com.springboot.smartflow.enums.LeaveType;
 import com.springboot.smartflow.enums.LeaveStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDate;
+import com.springboot.smartflow.enums.LeaveType;
+import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
 @Builder
-public final class LeaveRequest {
-    private Long requestId;
-    private Long requesterId;
-    private Long approverId;
-    private LeaveType leaveType;
-    private LeaveStatus status;
-    private LocalDate leaveDate;
+public class LeaveRequest {
+    private Long requestId;      // request_id
+    private Long requesterId;    // requester_id
+    private Long approverId;     // approver_id
+    private LeaveType leaveType; // AL, AM, PM
     private String reason;
+    private LeaveStatus status;  // PENDING, APPROVED, REJECTED
+    private LocalDateTime approvedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private LocalDateTime approvedAt;
 }

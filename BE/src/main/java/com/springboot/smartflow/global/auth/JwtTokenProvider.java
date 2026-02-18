@@ -6,6 +6,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -25,13 +28,23 @@ public class JwtTokenProvider {
     private final long refreshTokenValidTime = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     private final RedisTemplate<String, Object> redisTemplate;
+    
+    // 추가: 유저 상세 정보를 가져오기 위해 주입
+    private final CustomUserDetailsService customUserDetailsService;
 
     @PostConstruct
     protected void init() {
         key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Access/Refresh 토큰 생성 로직
+    // [추가] JWT 토큰에서 인증 정보 조회
+    // 이 메서드가 있어야 SecurityContextHolder에 인증 정보를 담을 수 있습니다.
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(this.getEmail(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    }
+
+    // Access 토큰 생성 로직
     public String createAccessToken(String email, String role) {
         Claims claims = Jwts.claims().subject(email).add("role", role).build();
         Date now = new Date();
@@ -43,6 +56,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    // Refresh 토큰 생성 로직
     public String createRefreshToken(String email) {
         Date now = new Date();
         String refreshToken = Jwts.builder()
@@ -71,6 +85,7 @@ public class JwtTokenProvider {
         }
     }
 
+    // 토큰에서 Email(Subject) 추출
     public String getEmail(String token) {
         return Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload().getSubject();
     }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.smartflow.domain.alarm.mapper.AlarmMapper">
+
+    <insert id="insertAlarm">
+        INSERT INTO alarm (receiver_id, title, content, type, is_read, created_at)
+        VALUES (#{receiverId}, #{title}, #{content}, #{type}, false, NOW())
+    </insert>
+
+    <select id="findAllByUserId" resultType="com.springboot.smartflow.domain.alarm.dto.AlarmResponseDTO">
+        SELECT alarm_id, title, content, type, is_read, created_at
+        FROM alarm
+        WHERE receiver_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="countUnread" resultType="int">
+        SELECT COUNT(*) FROM alarm 
+        WHERE receiver_id = #{userId} AND is_read = false
+    </select>
+
+    <update id="updateReadStatus">
+        UPDATE alarm SET is_read = true WHERE alarm_id = #{alarmId}
+    </update>
+
+    <update id="updateAllReadStatus">
+        UPDATE alarm SET is_read = true WHERE receiver_id = #{userId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM alarm WHERE alarm_id = #{alarmId}
+    </delete>
+
+</mapper>
